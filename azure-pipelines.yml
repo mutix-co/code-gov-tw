@@ -1,16 +1,9 @@
 pool:
   vmImage: ubuntu-latest
 
-pr:
-  branches:
-    exclude:
-      - main
-      - pre-release
-      - release
-
 stages:
   - stage: checkBeforeBuild
-    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+    condition: eq(variables['Build.Reason'], 'PullRequest')
     jobs:
       - job: Linter
         displayName: Lint Project
@@ -35,7 +28,7 @@ stages:
                 npm install
                 npm run fmt.check
   - stage: build
-    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+    condition: eq(variables['Build.Reason'], 'PullRequest')
     dependsOn: checkBeforeBuild
     jobs:
       - job: Build
@@ -56,7 +49,7 @@ stages:
               artifact: "build"
               publishLocation: "pipeline"
   - stage: checkAfterBuild
-    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+    condition: eq(variables['Build.Reason'], 'PullRequest')
     dependsOn: build
     jobs:
       - job: accessibility
@@ -234,13 +227,7 @@ stages:
             inputs:
               script: |
                 curl -X PATCH \
-                  --url "https://api.cloudflare.com/client/v4/zones/$(ZONE_ID)/dns_records/$(DNS_RECORD_ID)" \
+                  --url "https://api.cloudflare.com/client/v4/zones/$(ZONE_ID)/dns_record/$(DNS_RECORD_ID)" \
                   -H "Content-Type: application/json" \
                   -H "Authorization: Bearer $(CLOUDFLARE_API_TOKEN)" \
-                  --data '{"content": "'dnslink=/ipfs/$(cid)'"}' > response.json
-                cat response.json
-                result=`grep "success" response.json | awk '{print $2}' | tr -d ','`
-                if [ "$result" != "true" ]; then
-                  echo "Failed to update DNS"
-                  exit 1
-                fi
+                  --data '{"content": "'dnslink=/ipfs/$(cid)'"}' -f
