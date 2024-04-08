@@ -114,6 +114,9 @@ stages:
       - job: build
         displayName: Build
         steps:
+          - checkout: self
+            persistCredentials: true
+            clean: true
           - task: NodeTool@0
             inputs:
               versionSpec: "18.x"
@@ -136,7 +139,7 @@ stages:
                 git checkout -b pre-release
                 git add -f ./dist
                 git commit -m "[skip ci] Pre-release build"
-                git push -u origin pre-release
+                git push -u -f origin pre-release
   - stage: release
     displayName: Release
     dependsOn: []
@@ -147,6 +150,9 @@ stages:
       - job: build_release
         displayName: Build
         steps:
+          - checkout: self
+            persistCredentials: true
+            clean: true
           - task: NodeTool@0
             inputs:
               versionSpec: "18.x"
@@ -169,7 +175,7 @@ stages:
                 git checkout -b release
                 git add -f ./dist
                 git commit -m "[skip ci] Release build"
-                git push -u origin release
+                git push -u -f origin release
       - job: deploy_production
         steps:
           - task: GoTool@0
