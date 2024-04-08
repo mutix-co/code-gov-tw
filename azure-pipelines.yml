@@ -134,6 +134,7 @@ stages:
                 git add -f ./dist
                 git commit -m "[skip ci] Pre-release build"
                 git push -u -f origin pre-release
+
   - stage: release
     displayName: Release
     dependsOn: []
