@@ -35,6 +35,7 @@ stages:
                 npm install
                 npm run fmt.check
   - stage: build
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
     dependsOn: checkBeforeBuild
     jobs:
       - job: Build
@@ -55,6 +56,7 @@ stages:
               artifact: "build"
               publishLocation: "pipeline"
   - stage: checkAfterBuild
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
     dependsOn: build
     jobs:
       - job: accessibility
@@ -103,11 +105,10 @@ stages:
               targetPath: "./.lighthouseci"
               artifact: "lighthouse-results"
               publishLocation: "pipeline"
-
   - stage: pre_release
     displayName: Pre-release
     dependsOn: []
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'IndividualCI'))
     pool:
       vmImage: ubuntu-latest
     jobs:
@@ -135,7 +136,7 @@ stages:
             inputs:
               script: |
                 git config --global user.email "can_yu@mutix.co"
-                git config --global user.name "CanYu"
+                git config --global user.name "AzurePipeline"
                 git checkout -b pre-release
                 git add -f ./dist
                 git commit -m "[skip ci] Pre-release build"
@@ -171,7 +172,7 @@ stages:
             inputs:
               script: |
                 git config --global user.email "can_yu@mutix.co"
-                git config --global user.name "CanYu"
+                git config --global user.name "AzurePipeline"
                 git checkout -b release
                 git add -f ./dist
                 git commit -m "[skip ci] Release build"
