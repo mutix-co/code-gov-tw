@@ -106,11 +106,10 @@ stages:
 
   - stage: pre_release
     displayName: Pre-release
+    dependsOn: []
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-    dependsOn: [] 
     pool:
       vmImage: ubuntu-latest
-
     jobs:
       - job: build
         displayName: Build
@@ -132,13 +131,15 @@ stages:
             displayName: "commit changes"
             inputs:
               script: |
+                git config --global user.email "can_yu@mutix.co"
+                git config --global user.name "CanYu"
                 git checkout -b pre-release
-                git add ./dist
+                git add -f ./dist
                 git commit -m "[skip ci] Pre-release build"
-                git push origin pre-release
+                git push -u origin pre-release
   - stage: release
     displayName: Release
-    dependsOn: [] 
+    dependsOn: []
     condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'))
     pool:
       vmImage: ubuntu-latest
@@ -163,10 +164,12 @@ stages:
             displayName: "Commit changes"
             inputs:
               script: |
+                git config --global user.email "can_yu@mutix.co"
+                git config --global user.name "CanYu"
                 git checkout -b release
-                git add ./dist
+                git add -f ./dist
                 git commit -m "[skip ci] Release build"
-                git push origin release
+                git push -u origin release
       - job: deploy_production
         steps:
           - task: GoTool@0
