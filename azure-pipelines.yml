@@ -106,11 +106,13 @@ stages:
 
   - stage: pre_release
     displayName: Pre-release
+    dependsOn: [] 
     pool:
       vmImage: ubuntu-latest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     jobs:
       - job: build
+        displayName: Build
         steps:
           - task: NodeTool@0
             inputs:
@@ -135,11 +137,13 @@ stages:
                 git push origin pre-release
   - stage: release
     displayName: Release
+    dependsOn: [] 
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'))
     pool:
       vmImage: ubuntu-latest
     jobs:
       - job: build_release
+        displayName: Build
         steps:
           - task: NodeTool@0
             inputs:
