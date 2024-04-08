@@ -148,8 +148,22 @@ stages:
     pool:
       vmImage: ubuntu-latest
     jobs:
+      - job: test
+        displayName: Test
+        steps:
+          - checkout: self
+            persistCredentials: true
+            clean: true
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo $(cid)
+                curl -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
+                  -H "Authorization: Bearer $(CLOUDFLARE_API_TOKEN)" \
+                  -H "Content-Type:application/json"
       - job: build_release
         displayName: Build
+        dependsOn: test
         steps:
           - checkout: self
             persistCredentials: true
@@ -219,7 +233,6 @@ stages:
             displayName: Update DNS with CID
             inputs:
               script: |
-                echo $(cid)
                 curl -X PATCH \
                   --url "https://api.cloudflare.com/client/v4/zones/$(ZONE_ID)/dns_records/$(DNS_RECORD_ID)" \
                   -H "Content-Type: application/json" \
