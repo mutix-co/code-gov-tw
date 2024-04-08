@@ -178,6 +178,8 @@ stages:
                 git commit -m "[skip ci] Release build"
                 git push -u -f origin release
       - job: deploy_production
+        dependsOn: build_release
+        displayName: Deploy production
         steps:
           - task: GoTool@0
             inputs:
