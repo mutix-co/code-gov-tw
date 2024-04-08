@@ -225,6 +225,7 @@ stages:
                   -H "Content-Type: application/json" \
                   -H "Authorization: Bearer $(CLOUDFLARE_API_TOKEN)" \
                   --data '{"content": "'dnslink=/ipfs/$(cid)'"}' > response.json
+                cat response.json
                 result=`grep "success" response.json | awk '{print $2}' | tr -d ','`
                 if [ "$result" != "true" ]; then
                   echo "Failed to update DNS"
