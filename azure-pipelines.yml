@@ -10,7 +10,7 @@ pr:
 
 stages:
   - stage: checkBeforeBuild
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
     jobs:
       - job: Linter
         displayName: Lint Project
