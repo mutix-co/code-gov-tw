@@ -10,7 +10,7 @@ pr:
 
 stages:
   - stage: checkBeforeBuild
-    condition: and(eq(variables['Build.Reason'], 'PullRequest'))
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
     jobs:
       - job: Linter
         displayName: Lint Project
@@ -106,8 +106,8 @@ stages:
 
   - stage: pre_release
     displayName: Pre-release
-    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    dependsOn: []
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    dependsOn: [] 
     pool:
       vmImage: ubuntu-latest
 
@@ -138,8 +138,8 @@ stages:
                 git push origin pre-release
   - stage: release
     displayName: Release
-    dependsOn: []
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'))
+    dependsOn: [] 
+    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'))
     pool:
       vmImage: ubuntu-latest
     jobs:
