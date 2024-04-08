@@ -224,7 +224,7 @@ stages:
                   --url "https://api.cloudflare.com/client/v4/zones/$(ZONE_ID)/dns_records/$(DNS_RECORD_ID)" \
                   -H "Content-Type: application/json" \
                   -H "Authorization: Bearer $(CLOUDFLARE_API_TOKEN)" \
-                  -d '{"dnslink": "'/ipfs/$(cid)'"}' > response.json
+                  --data '{"content": "'dnslink=/ipfs/$(cid)'"}' > response.json
                 result=`grep "success" response.json | awk '{print $2}' | tr -d ','`
                 if [ "$result" != "true" ]; then
                   echo "Failed to update DNS"
