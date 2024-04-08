@@ -1,0 +1,7 @@
+ci:
+  collect:
+    staticDistDir: "./dist"
+    staticDirFileDiscoveryDepth: 3
+    numberOfRuns: 1
+  assert:
+    preset: "lighthouse:recommended"
