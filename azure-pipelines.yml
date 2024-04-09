@@ -1,6 +1,16 @@
 pool:
   vmImage: ubuntu-latest
 
+trigger:
+  branches:
+    include:
+      - main
+    exclude:
+      - refs/heads/release
+      - refs/heads/pre-release
+pr:
+  - main
+
 stages:
   - stage: checkBeforeBuild
     condition: eq(variables['Build.Reason'], 'PullRequest')
