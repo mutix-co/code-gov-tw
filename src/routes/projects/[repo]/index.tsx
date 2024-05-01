@@ -87,7 +87,7 @@ export default component$(() => {
           )}
           <Button
             class="!bg-primary-700 !text-white md:w-auto"
-            href={`${project.url ?? "#"}`}
+            href={`${project.url}`}
             target="_blank"
           >
             {$localize`公共程式頁面`}

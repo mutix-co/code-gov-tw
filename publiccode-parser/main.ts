@@ -23,6 +23,7 @@ function extractFilterTags(data: Project) {
   const techStacksSet = new Set<string>();
   const repoOwnersSet = new Set<string>();
   const mainCopyrightOwnerSet = new Set<string>();
+  const allSet = new Set<string>();
 
   // Collect description."zh-Hant".features
   if (Array.isArray(data.description["zh-Hant"].features)) {
@@ -67,11 +68,24 @@ function extractFilterTags(data: Project) {
     }
   }
 
+  const features = Array.from(featuresSet);
+  const techStacks = Array.from(techStacksSet);
+  const repoOwners = Array.from(repoOwnersSet);
+  const mainCopyrightOwners = Array.from(mainCopyrightOwnerSet);
+  const allUnique = new Set([
+    ...features,
+    ...techStacks,
+    ...repoOwners,
+    ...mainCopyrightOwners,
+  ]);
+  const all = Array.from(allUnique);
+
   return {
-    features: Array.from(featuresSet),
-    techStacks: Array.from(techStacksSet),
-    repoOwners: Array.from(repoOwnersSet),
-    mainCopyrightOwners: Array.from(mainCopyrightOwnerSet),
+    features,
+    techStacks,
+    repoOwners,
+    mainCopyrightOwners,
+    all,
   };
 }
 

@@ -1,23 +1,12 @@
-import {
-  $,
-  component$,
-  useSignal,
-  useStore,
-  useComputed$,
-} from "@builder.io/qwik";
+import { $, component$, useSignal, useStore } from "@builder.io/qwik";
 import Section from "~/components/section";
 import { RepoBlock } from "~/routes/projects/repo-block";
 import { PageNav } from "~/routes/projects/page-nav";
 import FunnelIcon from "~/media/icons/funnel-icon.svg?jsx";
-import Filter from "~/routes/projects/filter";
 import localProjects from "~/data/projects.json";
 import filters from "~/data/filters.json";
 import type { Project } from "~/types/Project";
-import {
-  filterProjectsByFeatures,
-  filterProjectsByRepoOwners,
-  filterProjectsByTechStacks,
-} from "~/routes/projects/filter-rules";
+import Filter from "./filter";
 
 function paginateData(
   filteredData: Project[],
@@ -37,27 +26,83 @@ export default component$(() => {
     projects: localProjects,
   });
 
-  const filterStore = useStore({
+  const filterStore = useStore<{
+    features: string[];
+    repoOwners: string[];
+    techStacks: string[];
+    all: string[];
+  }>({
     features: [],
     repoOwners: [],
     techStacks: [],
+    all: [],
   });
 
-  const computedProjects = useComputed$(
-    (): { data: Project[]; total: number } => {
-      const filteredProjects = store.projects.filter((project) => {
-        return (
-          filterProjectsByFeatures(project, filterStore.features) &&
-          filterProjectsByRepoOwners(project, filterStore.repoOwners) &&
-          filterProjectsByTechStacks(project, filterStore.techStacks)
-        );
-      });
-      return {
-        data: paginateData(filteredProjects, currentPage.value, itemsPerPage),
-        total: filteredProjects.length,
-      };
-    },
-  );
+  const projects = useStore<{ list: Project[]; total: number }>({
+    list: paginateData(localProjects, currentPage.value, itemsPerPage),
+    total: localProjects.length,
+  });
+
+  const filterHandler = $(async (categoryName: string, filterState: any) => {
+    if (categoryName === "features") {
+      filterStore.features = Array.from(new Set([...filterState]));
+    } else if (categoryName === "repoOwners") {
+      filterStore.repoOwners = Array.from(new Set([...filterState]));
+    } else if (categoryName === "techStacks") {
+      filterStore.techStacks = Array.from(new Set([...filterState]));
+    } else if (categoryName === "ClearFilter") {
+      filterStore.features = [];
+      filterStore.repoOwners = [];
+      filterStore.techStacks = [];
+      filterStore.all = [];
+    }
+
+    // Reset the current page to 1 when filters are changed
+    currentPage.value = 1;
+
+    filterStore.all = Array.from(
+      new Set([
+        ...filterState,
+        ...filterStore.features,
+        ...filterStore.repoOwners,
+        ...filterStore.techStacks,
+      ]),
+    );
+
+    const filteredProjects = store.projects.filter((project) => {
+      return filterStore.all.every((filter) =>
+        project.filterTags.all.includes(filter),
+      );
+    });
+
+    projects.list = paginateData(
+      filteredProjects,
+      currentPage.value,
+      itemsPerPage,
+    );
+
+    projects.total = filteredProjects.length;
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  const pageHandler = $(async (pageNumber: number) => {
+    currentPage.value = pageNumber;
+    const filteredProjects = store.projects.filter((project) => {
+      return filterStore.all.every((filter) =>
+        project.filterTags.all.includes(filter),
+      );
+    });
+
+    projects.list = paginateData(
+      filteredProjects,
+      currentPage.value,
+      itemsPerPage,
+    );
+
+    projects.total = filteredProjects.length;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   const handleMobileFilter = $(() => (filter.value = !filter.value));
 
@@ -103,85 +148,68 @@ export default component$(() => {
           )}
           <div
             id="filter"
-            class="hidden min-w-60 flex-shrink-0 flex-col gap-8 md:flex"
+            class={[
+              "min-w-60 flex-shrink-0 flex-col gap-8 md:flex",
+              filter.value ? "block" : "hidden",
+            ]}
           >
             <Filter
-              filterName="features"
+              name="features"
+              options={filters.features}
               categoryName={$localize`功能類型`}
-              filterOptions={filters.features}
-              store={filterStore}
+              onChange$={filterHandler}
             />
             <Filter
-              filterName="repoOwners"
+              name="repoOwners"
               categoryName={$localize`提供單位`}
-              filterOptions={filters.repoOwners}
-              store={filterStore}
+              options={filters.repoOwners}
+              onChange$={filterHandler}
             />
             <Filter
-              filterName="techStacks"
+              name="techStacks"
               categoryName={$localize`使用技術`}
-              filterOptions={filters.techStacks}
-              store={filterStore}
+              options={filters.techStacks}
+              onChange$={filterHandler}
             />
           </div>
-          {filter.value ? (
-            <div
-              id="filter"
-              class="flex min-w-60 flex-shrink-0 flex-col gap-8 md:hidden"
-            >
-              <Filter
-                filterName="features"
-                categoryName={$localize`包含系統功能`}
-                filterOptions={filters.features}
-                store={filterStore}
-              />
-              <Filter
-                filterName="repoOwners"
-                categoryName={$localize`提供單位`}
-                filterOptions={filters.repoOwners}
-                store={filterStore}
-              />
-              <Filter
-                filterName="techStacks"
-                categoryName={$localize`使用技術`}
-                filterOptions={filters.techStacks}
-                store={filterStore}
-              />
-            </div>
-          ) : (
-            <div id="projects" class="flex w-full flex-col gap-8">
-              {computedProjects.value.data.map((project) => {
-                const projectName =
-                  project.description["zh-Hant"].localisedName || project.name;
-                const mainCopyrightOwner = project.legal.mainCopyrightOwner;
-                const repoOwner = project.legal.repoOwner.split(" ")[0];
-                const projectDescription =
-                  project.description["zh-Hant"].shortDescription;
-                const projectFeatures = project.description["zh-Hant"].features;
-                const mainCopyrightOwnerLogo =
-                  project.tw.mainCopyrightOwnerLogo;
-                return (
-                  <RepoBlock
-                    id={project.id}
-                    key={project.name}
-                    name={projectName}
-                    repoOwner={repoOwner}
-                    mainCopyrightOwner={mainCopyrightOwner}
-                    mainCopyrightOwnerLogo={mainCopyrightOwnerLogo}
-                    shortDescription={projectDescription}
-                    features={projectFeatures}
-                    dependsOn={project.dependsOn?.open}
-                    techStacks={project.tw.techStacks}
-                  />
-                );
-              })}
-              <PageNav
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                totalItems={computedProjects.value.total}
-              />
-            </div>
-          )}
+          <div
+            id="projects"
+            class={[
+              "flex w-full flex-col gap-8",
+              filter.value ? "hidden md:block" : "block",
+            ]}
+          >
+            {projects.list.map((project) => {
+              const projectName =
+                project.description["zh-Hant"].localisedName || project.name;
+              const mainCopyrightOwner = project.legal.mainCopyrightOwner;
+              const repoOwner = project.legal.repoOwner.split(" ")[0];
+              const projectDescription =
+                project.description["zh-Hant"].shortDescription;
+              const projectFeatures = project.description["zh-Hant"].features;
+              const mainCopyrightOwnerLogo = project.tw.mainCopyrightOwnerLogo;
+              return (
+                <RepoBlock
+                  id={project.id}
+                  key={project.name}
+                  name={projectName}
+                  repoOwner={repoOwner}
+                  mainCopyrightOwner={mainCopyrightOwner}
+                  mainCopyrightOwnerLogo={mainCopyrightOwnerLogo}
+                  shortDescription={projectDescription}
+                  features={projectFeatures}
+                  dependsOn={project.dependsOn?.open}
+                  techStacks={project.tw.techStacks}
+                />
+              );
+            })}
+            <PageNav
+              currentPage={currentPage.value}
+              itemsPerPage={itemsPerPage}
+              totalItems={projects.total}
+              onChange$={pageHandler}
+            />
+          </div>
         </div>
       </Section>
     </>
