@@ -1,11 +1,12 @@
-import { component$, $ } from "@builder.io/qwik";
+import { component$, useSignal, $, type QRL } from "@builder.io/qwik";
 import ArrowLeftIcon from "~/media/icons/arrow-left-icon.svg?jsx";
 import ArrowRightIcon from "~/media/icons/arrow-right-icon.svg?jsx";
 
 type PageNavProps = {
-  currentPage: any;
+  currentPage: number;
   itemsPerPage: number;
   totalItems: number;
+  onChange$: QRL<(pageNumber: number) => void>;
 };
 
 function calculatePageRange(currentPage: number, totalPage: number) {
@@ -42,47 +43,52 @@ function generatePageNumbers(totalPage: number, currentPageValue: number) {
 }
 
 export const PageNav = component$<PageNavProps>(
-  ({ currentPage, itemsPerPage, totalItems }) => {
+  ({ currentPage, itemsPerPage, totalItems, onChange$ }) => {
     const totalPage = Math.ceil(totalItems / itemsPerPage);
+    const loading = useSignal(false);
 
-    const handleNextPage = $(() => {
-      if (currentPage.value * itemsPerPage >= totalItems) {
+    const handleNextPage = $(async () => {
+      loading.value = true;
+      if (currentPage * itemsPerPage >= totalItems) {
         return;
       }
-      currentPage.value++;
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      await onChange$(currentPage + 1);
+      loading.value = false;
     });
 
-    const handlePrevPage = $(() => {
-      if (currentPage.value === 1) return;
-      currentPage.value--;
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    const handlePrevPage = $(async () => {
+      if (currentPage === 1) return;
+      loading.value = true;
+      await onChange$(currentPage - 1);
+      loading.value = false;
+    });
+
+    const handleDirectPage = $(async (e: Event) => {
+      loading.value = true;
+      const pageNumber = parseInt((e.target as HTMLButtonElement).textContent!);
+      await onChange$(pageNumber);
+      loading.value = false;
     });
 
     const generatePageList = () => {
-      const pages = generatePageNumbers(totalPage, currentPage.value);
+      const pages = generatePageNumbers(totalPage, currentPage);
 
       return pages.map((page, index) => (
         <button
           key={index}
           class={[
             "group relative w-10 font-medium hover:text-brand-secondary",
-            currentPage.value === page
-              ? "text-brand-secondary"
-              : "text-gray-300",
+            currentPage === page ? "text-brand-secondary" : "text-gray-300",
             "transition-colors duration-[50ms] ease-out",
           ]}
-          onClick$={() => {
-            currentPage.value = page;
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+          onClick$={handleDirectPage}
           disabled={page === -1}
         >
           {page === -1 ? "..." : page}
           <span
             class={[
               "absolute inset-x-0 -top-4 w-10 border-t-2 border-brand-secondary group-hover:border-brand-secondary",
-              currentPage.value === page
+              currentPage === page && !loading.value
                 ? "border-brand-secondary"
                 : "border-transparent",
               "transition-colors duration-[50ms] ease-out",
@@ -93,11 +99,9 @@ export const PageNav = component$<PageNavProps>(
     };
 
     return (
-      <div class="flex justify-between border-t-[1px] pt-4">
+      <div class={["relative flex justify-between border-t-[1px] pt-4"]}>
         <button
-          class={[
-            currentPage.value === 1 ? "pointer-events-none opacity-0" : "",
-          ]}
+          class={[currentPage === 1 ? "pointer-events-none opacity-0" : ""]}
           onClick$={handlePrevPage}
         >
           <div class="flex gap-3">
@@ -110,18 +114,24 @@ export const PageNav = component$<PageNavProps>(
 
         <button
           class={[
-            currentPage.value * itemsPerPage >= totalItems
+            currentPage * itemsPerPage >= totalItems
               ? "pointer-events-none opacity-0"
               : "",
           ]}
           onClick$={handleNextPage}
-          disabled={currentPage.value * itemsPerPage >= totalItems}
+          disabled={currentPage * itemsPerPage >= totalItems}
         >
           <div class="flex gap-3">
             <div class="text-sm font-medium">{$localize`下一頁`}</div>
             <ArrowRightIcon class="w-5" />
           </div>
         </button>
+        <div
+          class={[
+            "absolute -top-0 h-1 w-full animate-back-forth border-t-2 border-brand-secondary",
+            loading.value ? "block" : "hidden",
+          ]}
+        ></div>
       </div>
     );
   },

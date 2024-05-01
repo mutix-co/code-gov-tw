@@ -61,6 +61,19 @@ export default {
         black: "#1a1a1a",
         white: "#ffffff",
       },
+      animation: {
+        "back-forth": "back-forth 10s ease-in-out infinite",
+      },
+      keyframes: {
+        "back-forth": {
+          "0%, 100%": {
+            transform: "scaleX(0)",
+          },
+          "50%": {
+            transform: "scaleX(1)",
+          },
+        },
+      },
     },
   },
   plugins: [],

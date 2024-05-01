@@ -49,7 +49,10 @@
       ]
     },
     "localisation": {
-      "localisationReady": false
+      "localisationReady": false,
+      "availableLanguages": [
+        "zh-Hant"
+      ]
     },
     "dependsOn": {
       "open": [
@@ -63,7 +66,7 @@
       ]
     },
     "usedBy": [
-      "臺南市政府衛生局內部用於登革熱防疫作業"
+      "[臺南市登革熱防疫現場數位工具](https://dengue.tncghb.gov.tw/dashboard) (無障礙檢測結果：尚未檢測)"
     ],
     "tw": {
       "countryExtensionVersion": "1.0.0",
@@ -103,6 +106,19 @@
         "數位發展部"
       ],
       "mainCopyrightOwners": [
+        "數位發展部"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "個案管理",
+        "地圖資訊呈現",
+        "資料一覽 / 檢索",
+        "數據呈現",
+        "Node.js",
+        "Firebase Realtime Database",
+        "Vue.js",
+        "HTML/CSS",
+        "JavaScript",
         "數位發展部"
       ]
     }
@@ -157,7 +173,10 @@
       ]
     },
     "localisation": {
-      "localisationReady": false
+      "localisationReady": false,
+      "availableLanguages": [
+        "zh-Hant"
+      ]
     },
     "dependsOn": {
       "open": [
@@ -172,7 +191,7 @@
       ]
     },
     "usedBy": [
-      "臺南市政府衛生局內部用於登革熱防疫作業"
+      "[臺南市登革熱防疫現場數位工具](https://dengue.tncghb.gov.tw) (無障礙檢測結果：尚未檢測)"
     ],
     "tw": {
       "countryExtensionVersion": "1.0.0",
@@ -212,6 +231,19 @@
         "數位發展部"
       ],
       "mainCopyrightOwners": [
+        "數位發展部"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "個案管理",
+        "地圖資訊呈現",
+        "資料一覽 / 檢索",
+        "數據呈現",
+        "Node.js",
+        "MongoDB",
+        "Vue.js",
+        "HTML/CSS",
+        "JavaScript",
         "數位發展部"
       ]
     }
@@ -269,7 +301,10 @@
       ]
     },
     "localisation": {
-      "localisationReady": false
+      "localisationReady": false,
+      "availableLanguages": [
+        "zh-Hant"
+      ]
     },
     "dependsOn": {
       "open": [
@@ -321,6 +356,18 @@
         "數位發展部"
       ],
       "mainCopyrightOwners": [
+        "數位發展部"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "個案管理",
+        "地圖資訊呈現",
+        "PHP",
+        "MySQL",
+        "Vue.js",
+        "HTML/CSS",
+        "JavaScript",
+        "Laravel",
         "數位發展部"
       ]
     }
@@ -378,7 +425,10 @@
       ]
     },
     "localisation": {
-      "localisationReady": false
+      "localisationReady": false,
+      "availableLanguages": [
+        "zh-Hant"
+      ]
     },
     "dependsOn": {
       "open": [
@@ -430,6 +480,18 @@
         "數位發展部"
       ],
       "mainCopyrightOwners": [
+        "數位發展部"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "個案管理",
+        "地圖資訊呈現",
+        "PHP",
+        "MySQL",
+        "Vue.js",
+        "HTML/CSS",
+        "JavaScript",
+        "Laravel",
         "數位發展部"
       ]
     }
@@ -525,6 +587,13 @@
       ],
       "mainCopyrightOwners": [
         "數位發展部"
+      ],
+      "all": [
+        "資料一覽 / 檢索",
+        "Node.js",
+        "Qwik",
+        "Tailwind CSS",
+        "數位發展部"
       ]
     }
   },
@@ -618,6 +687,14 @@
         "其他"
       ],
       "mainCopyrightOwners": [
+        "英國政府數位服務團"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "Ruby",
+        "HTML/CSS",
+        "SCSS",
+        "其他",
         "英國政府數位服務團"
       ]
     }
@@ -713,6 +790,14 @@
       ],
       "mainCopyrightOwners": [
         "英國政府數位服務團"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "HTML/CSS",
+        "Ruby",
+        "SCSS",
+        "其他",
+        "英國政府數位服務團"
       ]
     }
   },
@@ -805,6 +890,14 @@
         "其他"
       ],
       "mainCopyrightOwners": [
+        "英國政府數位服務團"
+      ],
+      "all": [
+        "公共服務通知",
+        "Python",
+        "HTML/CSS",
+        "JavaScript",
+        "其他",
         "英國政府數位服務團"
       ]
     }
@@ -899,6 +992,14 @@
       ],
       "mainCopyrightOwners": [
         "Foundation"
+      ],
+      "all": [
+        "編輯器",
+        "HTML/CSS",
+        "JavaScript",
+        "SCSS",
+        "其他",
+        "Foundation"
       ]
     }
   },
@@ -989,6 +1090,12 @@
         "其他"
       ],
       "mainCopyrightOwners": [
+        "Foundation"
+      ],
+      "all": [
+        "標準",
+        "Python",
+        "其他",
         "Foundation"
       ]
     }
@@ -1087,6 +1194,15 @@
       ],
       "mainCopyrightOwners": [
         "Element"
+      ],
+      "all": [
+        "即時通訊",
+        "HTML/CSS",
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "其他",
+        "Element"
       ]
     }
   },
@@ -1184,6 +1300,15 @@
       ],
       "mainCopyrightOwners": [
         "Element"
+      ],
+      "all": [
+        "即時通訊",
+        "HTML/CSS",
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "其他",
+        "Element"
       ]
     }
   },
@@ -1233,7 +1358,10 @@
       ]
     },
     "localisation": {
-      "localisationReady": false
+      "localisationReady": false,
+      "availableLanguages": [
+        "zh-Hant"
+      ]
     },
     "dependsOn": {
       "open": [
@@ -1275,6 +1403,15 @@
         "數位發展部"
       ],
       "mainCopyrightOwners": [
+        "數位發展部"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "個案管理",
+        "數據呈現",
+        "ASP.NET Core",
+        "C#",
+        "MySQL",
         "數位發展部"
       ]
     }
@@ -1382,6 +1519,16 @@
       ],
       "mainCopyrightOwners": [
         "數位發展部"
+      ],
+      "all": [
+        "表單填寫 / 資料上傳",
+        "資料一覽 / 檢索",
+        "C#",
+        "ASP.NET Core",
+        "SQL Server",
+        "JavaScript",
+        "HTML/CSS",
+        "數位發展部"
       ]
     }
   },
@@ -1431,7 +1578,10 @@
       ]
     },
     "localisation": {
-      "localisationReady": false
+      "localisationReady": false,
+      "availableLanguages": [
+        "zh-Hant"
+      ]
     },
     "dependsOn": {
       "open": [
@@ -1466,6 +1616,12 @@
         "數位發展部"
       ],
       "mainCopyrightOwners": [
+        "數位發展部"
+      ],
+      "all": [
+        "文書處理",
+        "Open Document Format",
+        "C++",
         "數位發展部"
       ]
     }
@@ -1576,6 +1732,14 @@
       ],
       "mainCopyrightOwners": [
         "數位發展部"
+      ],
+      "all": [
+        "資料一覽 / 檢索",
+        "JavaScript",
+        "HTML/CSS",
+        "TypeScript",
+        "Vue.js",
+        "數位發展部"
       ]
     }
   },
@@ -1653,6 +1817,11 @@
         "行政院公共數位創新空間（PDIS）"
       ],
       "mainCopyrightOwners": [
+        "行政院公共數位創新空間（PDIS）"
+      ],
+      "all": [
+        "網頁效能檢測",
+        "Lighthouse",
         "行政院公共數位創新空間（PDIS）"
       ]
     }
@@ -1737,6 +1906,13 @@
         "行政院公共數位創新空間（PDIS）"
       ],
       "mainCopyrightOwners": [
+        "行政院公共數位創新空間（PDIS）"
+      ],
+      "all": [
+        "靜態網站產生器",
+        "自動翻譯",
+        "Jekyll",
+        "Cloud Translation API",
         "行政院公共數位創新空間（PDIS）"
       ]
     }
@@ -1824,6 +2000,13 @@
         "其他"
       ],
       "mainCopyrightOwners": [
+        "Foundation"
+      ],
+      "all": [
+        "標準",
+        "HTML/CSS",
+        "Shell",
+        "其他",
         "Foundation"
       ]
     }
@@ -1932,6 +2115,17 @@
       ],
       "mainCopyrightOwners": [
         "臺北市政府資訊局"
+      ],
+      "all": [
+        "地圖資訊呈現",
+        "數據呈現",
+        "Python",
+        "Go",
+        "PostgreSQL",
+        "Redis",
+        "Vue.js",
+        "SQL Server",
+        "臺北市政府資訊局"
       ]
     }
   },
@@ -2024,6 +2218,14 @@
       ],
       "mainCopyrightOwners": [
         "Yivi"
+      ],
+      "all": [
+        "身份驗證",
+        "Dart",
+        "Go",
+        "Java",
+        "其他",
+        "Yivi"
       ]
     }
   },
@@ -2111,6 +2313,13 @@
         "其他"
       ],
       "mainCopyrightOwners": [
+        "Yivi"
+      ],
+      "all": [
+        "身份驗證",
+        "Python",
+        "Shell",
+        "其他",
         "Yivi"
       ]
     }
