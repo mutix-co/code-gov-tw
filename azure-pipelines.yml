@@ -1,12 +1,10 @@
 trigger:
   branches:
     include:
-      - main
-    exclude:
       - refs/heads/release
-      - refs/heads/pre-release
+
 pr:
-  - main
+  - refs/heads/release
 
 pool:
   vmImage: "ubuntu-latest"
@@ -136,42 +134,3 @@ stages:
               targetPath: "./.lighthouseci"
               artifact: "lighthouse-results"
               publishLocation: "pipeline"
-  - stage: pre_release
-    displayName: Pre-release
-    dependsOn: []
-    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'IndividualCI'))
-    jobs:
-      - job: build
-        displayName: Build
-        steps:
-          - checkout: self
-            persistCredentials: true
-            clean: true
-          - task: UseNode@1
-            inputs:
-              version: "18.x"
-          - task: Cache@2
-            inputs:
-              key: $(cache_key)
-              path: $(npm_config_cache)
-            displayName: Use Cache
-          - task: CmdLine@2
-            inputs:
-              script: |
-                npm install
-                npm run build
-          - task: PublishPipelineArtifact@1
-            inputs:
-              targetPath: "./dist"
-              artifact: "pre-release-build"
-              publishLocation: "pipeline"
-          - task: CmdLine@2
-            displayName: "commit changes"
-            inputs:
-              script: |
-                git config --global user.email "can_yu@mutix.co"
-                git config --global user.name "AzurePipeline"
-                git checkout -b pre-release
-                git add -f ./dist
-                git commit -m "[skip ci] Pre-release build"
-                git push -u -f origin pre-release
