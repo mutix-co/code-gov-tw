@@ -144,7 +144,7 @@ stages:
   - stage: releaseToIPFS
     displayName: Release to IPFS
     dependsOn: checkAfterBuild
-    condition: and(succeeded(), eq(variables['Build.Reason'], 'IndividualCI'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'main'), eq(variables['Build.Reason'], 'IndividualCI'))
     jobs:
       - job: prepare
         displayName: Prepare
