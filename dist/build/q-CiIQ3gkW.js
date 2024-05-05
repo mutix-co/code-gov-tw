@@ -1,0 +1,1 @@
+import{u as n}from"./q-Cd-f-dK9.js";const p=async t=>{const[o]=n(),e=await o.resolve(),s=await(typeof e=="function"?e():e)._parse(t,{abortPipeEarly:!0});return s.issues?s.issues.reduce((r,a)=>({...r,[a.path.map(({key:c})=>c).join(".")]:a.message}),{}):{}};export{p as s_b4MyjhrwMxE};

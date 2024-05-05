@@ -1,0 +1,1 @@
+import{u as r}from"./q-Cd-f-dK9.js";const e=s=>{const[o]=r();return s&&!/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(s)?o:""};export{e as s_WNtBdMWIifo};

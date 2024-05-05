@@ -1,0 +1,1 @@
+import{L as e}from"./q-DcQVA5E3.js";import{_ as o,S as t}from"./q-Cd-f-dK9.js";import{u as n}from"./q-AjoKVrqR.js";import"./q-uemlvruI.js";const l=r=>{const s=`${n()}${r.href}`;return o(e,{...r,href:s,children:o(t,null,3,"Vx_0")},0,"Vx_1")};export{l as s_rAT0EE80nuU};

@@ -1,0 +1,1 @@
+import{a as s,e as p,_ as x,S as n}from"./q-Cd-f-dK9.js";const _=l=>s("section",null,{class:p(a=>a.class,[l])},s("div",null,{class:"max-wrapper px-6 py-16 md:px-10 md:py-16 lg:px-10 lg:py-20 xl:px-[120px]"},x(n,null,3,"hs_0"),1,null),1,"hs_1");export{_ as s_saY5gHcKxwE};

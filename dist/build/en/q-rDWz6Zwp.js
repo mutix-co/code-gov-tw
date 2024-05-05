@@ -1,0 +1,1 @@
+import o from"./q-Bjv4G1or.js";import"./q-uemlvruI.js";import"./q-Cd-f-dK9.js";const i=()=>{throw"Symbol removed by Qwik Optimizer, it can not be called from current platform"};export{o as default,i as onStaticGenerate};

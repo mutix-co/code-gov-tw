@@ -1,0 +1,1 @@
+import{u as o}from"./q-Cd-f-dK9.js";const n=async t=>{var s;const[a]=o(),e=await a.resolve();return((s=(await(typeof e=="function"?e():e)._parse(t,{abortPipeEarly:!0})).issues)==null?void 0:s[0].message)||""};export{n as s_v0HdjU01a3w};
