@@ -1,5 +1,8 @@
 {
   "ci": {
+    "baseThrottling": {
+      "cpuSlowdownMultiplier:": 2.0
+    },
     "collect": {
       "numberOfRuns": 1,
       "maxAutodiscoverUrls": 10
