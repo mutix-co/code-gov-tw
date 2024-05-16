@@ -4,7 +4,10 @@ import {
   useSignal,
   useStore,
   useComputed$,
+  useTask$,
+  useOnWindow,
 } from "@builder.io/qwik";
+import { isBrowser } from "@builder.io/qwik/build";
 import Section from "~/components/section";
 import { RepoBlock } from "~/routes/projects/repo-block";
 import { PageNav } from "~/routes/projects/page-nav";
@@ -18,6 +21,7 @@ import {
   filterProjectsByRepoOwners,
   filterProjectsByTechStacks,
 } from "~/routes/projects/filter-rules";
+import { useLocation } from "@builder.io/qwik-city";
 
 function paginateData(
   filteredData: Project[],
@@ -37,7 +41,12 @@ export default component$(() => {
     projects: localProjects,
   });
 
-  const filterStore = useStore({
+  const location = useLocation();
+  const filterStore = useStore<{
+    features: string[];
+    repoOwners: string[];
+    techStacks: string[];
+  }>({
     features: [],
     repoOwners: [],
     techStacks: [],
@@ -60,6 +69,74 @@ export default component$(() => {
   );
 
   const handleMobileFilter = $(() => (filter.value = !filter.value));
+
+  // Accept currentPage, filters from URL query parameters from initial load
+  useOnWindow(
+    "pageshow",
+    $(() => {
+      // currentPage initial load
+      const page = location.url.searchParams.get("page");
+      const parsedPage = parseInt(page ?? "1");
+      currentPage.value = isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
+
+      // filters initial load
+      const features = location.url.searchParams.get("features");
+      const repoOwners = location.url.searchParams.get("repoOwners");
+      const techStacks = location.url.searchParams.get("techStacks");
+
+      const parsedFeatures = features?.split(",") ?? [];
+      filterStore.features = parsedFeatures;
+      const parsedRepoOwners = repoOwners?.split(",") ?? [];
+      filterStore.repoOwners = parsedRepoOwners;
+      const parsedTechStacks = techStacks?.split(",") ?? [];
+      filterStore.techStacks = parsedTechStacks;
+
+      window.history.replaceState({}, "", `?page=${currentPage.value}`);
+    }),
+  );
+
+  // Update URL query parameters when currentPage or filters change
+  useTask$(({ track }) => {
+    track(() => currentPage.value);
+    track(() => filterStore.features);
+    track(() => filterStore.repoOwners);
+    track(() => filterStore.techStacks);
+
+    // Reset currentPage to 1 when filters change
+    if (
+      filterStore.features.length > 0 ||
+      filterStore.repoOwners.length > 0 ||
+      filterStore.techStacks.length > 0
+    ) {
+      currentPage.value = 1;
+    }
+
+    const queryParameters = [];
+
+    const features = filterStore.features.join(",");
+    if (features) {
+      queryParameters.push(`features=${features}`);
+    }
+    const repoOwners = filterStore.repoOwners.join(",");
+    if (repoOwners) {
+      queryParameters.push(`repoOwners=${repoOwners}`);
+    }
+    const techStacks = filterStore.techStacks.join(",");
+    if (techStacks) {
+      queryParameters.push(`techStacks=${techStacks}`);
+    }
+
+    queryParameters.push(`page=${currentPage.value}`);
+
+    isBrowser &&
+      window.history.replaceState({}, "", `?${queryParameters.join("&")}`);
+  });
+
+  const handleFilterReset = $(() => {
+    filterStore.features = [];
+    filterStore.repoOwners = [];
+    filterStore.techStacks = [];
+  });
 
   return (
     <>
@@ -123,6 +200,10 @@ export default component$(() => {
               filterOptions={filters.techStacks}
               store={filterStore}
             />
+            <button
+              class="font-medium text-brand-secondary"
+              onClick$={handleFilterReset}
+            >{$localize`重設篩選`}</button>
           </div>
           {filter.value ? (
             <div
@@ -147,9 +228,22 @@ export default component$(() => {
                 filterOptions={filters.techStacks}
                 store={filterStore}
               />
+              <button
+                class="font-medium text-brand-secondary"
+                onClick$={handleFilterReset}
+              >{$localize`重設篩選`}</button>
             </div>
           ) : (
             <div id="projects" class="flex w-full flex-col gap-8">
+              {computedProjects.value.total === 0 && (
+                <div class="mx-auto mt-4 flex flex-col justify-center">
+                  <h3>{$localize`找不到篩選的專案`}</h3>
+                  <button
+                    class="mt-4 font-medium text-brand-secondary"
+                    onClick$={handleFilterReset}
+                  >{$localize`重設篩選`}</button>
+                </div>
+              )}
               {computedProjects.value.data.map((project) => {
                 const projectName =
                   project.description["zh-Hant"].localisedName || project.name;
